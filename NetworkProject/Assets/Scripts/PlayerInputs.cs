@@ -2,17 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerInputs : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private PlayerControls playerControls;
+    private Vector2 movementInput;
+    public Vector2 MovementVector => movementInput;
+
+    private void OnEnable()
     {
-        
+        if (playerControls == null)
+        {
+            playerControls = new PlayerControls();
+        }
+
+
+        playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+        playerControls.PlayerMovement.Movement.canceled += i => movementInput = Vector2.zero;
+        playerControls.Enable();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
     }
+
 }
